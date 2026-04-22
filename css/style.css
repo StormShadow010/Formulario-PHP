@@ -1,0 +1,411 @@
+/* =====================================================
+   ARCHIVO: css/style.css
+   DESCRIPCIÓN: Diseño oscuro con acentos violeta/púrpura.
+
+   SECCIONES:
+     1. Variables CSS
+     2. Reset y body
+     3. Esferas decorativas
+     4. Encabezado
+     5. Tarjeta
+     6. Grid de campos
+     7. Labels
+     8. Inputs y textarea
+     9. Contador de caracteres
+    10. Mensajes de error
+    11. Botones
+    12. Animaciones
+    13. Responsive
+   ===================================================== */
+
+/* ─────────────────────────────────────────────────────
+   1. VARIABLES CSS
+   ───────────────────────────────────────────────────── */
+:root {
+  --bg: #0d0f14;
+  --superficie: #13161f;
+  --input-bg: #1a1e2c;
+  --borde: #252a3a;
+  --borde-foco: #7c6aff;
+
+  --acento: #7c6aff;
+  --acento-2: #c084fc;
+  --brillo: rgba(124, 106, 255, 0.3);
+  --degradado: linear-gradient(135deg, #7c6aff 0%, #c084fc 100%);
+
+  --texto: #e8eaf0;
+  --texto-suave: #7a7f9a;
+  --texto-label: #b0b5d0;
+
+  --error: #f87171;
+  --exito: #34d399;
+
+  --fuente-titulo: "Playfair Display", serif;
+  --fuente-cuerpo: "DM Sans", sans-serif;
+
+  --radio: 14px;
+  --radio-tarjeta: 28px;
+}
+
+/* ─────────────────────────────────────────────────────
+   2. RESET Y BODY
+   ───────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--fuente-cuerpo);
+  background-color: var(--bg);
+  color: var(--texto);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* ─────────────────────────────────────────────────────
+   3. ESFERAS DECORATIVAS DE FONDO
+   Position fixed para que no afecten el layout.
+   pointer-events none para no capturar clics.
+   ───────────────────────────────────────────────────── */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  opacity: 0.35;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.orb-1 {
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, #7c6aff, transparent 70%);
+  top: -140px;
+  left: -110px;
+  animation: flotar 13s ease-in-out infinite;
+}
+
+.orb-2 {
+  width: 360px;
+  height: 360px;
+  background: radial-gradient(circle, #c084fc, transparent 70%);
+  bottom: -90px;
+  right: -90px;
+  animation: flotar 16s ease-in-out infinite reverse;
+}
+
+/* ─────────────────────────────────────────────────────
+   4. ENCABEZADO
+   ───────────────────────────────────────────────────── */
+.encabezado {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 680px;
+  width: 100%;
+  margin-bottom: 1.8rem;
+  animation: bajar 0.65s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--texto);
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 50px;
+  padding: 0.35rem 1.1rem;
+  margin-bottom: 1.1rem;
+}
+
+h1 {
+  font-family: var(--fuente-titulo);
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  line-height: 1.15;
+  margin-bottom: 0.85rem;
+}
+
+/* El span dentro del h1 lleva el color degradado violeta */
+h1 span {
+  background: var(--degradado);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.descripcion {
+  font-size: 0.97rem;
+  color: var(--texto-suave);
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────────────
+   5. TARJETA DEL FORMULARIO
+   ::before → línea degradada decorativa en la parte superior
+   ───────────────────────────────────────────────────── */
+.tarjeta {
+  position: relative;
+  z-index: 1;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-tarjeta);
+  padding: 2.5rem 2.8rem;
+  width: 100%;
+  max-width: 760px;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.55),
+    0 1px 0 rgba(255, 255, 255, 0.04) inset;
+  animation: subir 0.65s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+}
+
+.tarjeta::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 8%;
+  right: 8%;
+  height: 2px;
+  background: var(--degradado);
+  border-radius: 0 0 4px 4px;
+}
+
+/* ─────────────────────────────────────────────────────
+   6. GRID DE CAMPOS
+   2 columnas por defecto. .campo-completo usa las 2.
+   ───────────────────────────────────────────────────── */
+form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.4rem;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+/* Petición y botones ocupan las 2 columnas */
+.campo-completo,
+.botones {
+  grid-column: 1 / -1;
+}
+
+/* ─────────────────────────────────────────────────────
+   7. LABELS
+   ───────────────────────────────────────────────────── */
+label {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--texto-label);
+  letter-spacing: 0.03em;
+  user-select: none;
+}
+
+/* ─────────────────────────────────────────────────────
+   8. INPUTS Y TEXTAREA
+   ───────────────────────────────────────────────────── */
+input,
+textarea {
+  width: 100%;
+  background: var(--input-bg);
+  border: 1.5px solid var(--borde);
+  border-radius: var(--radio);
+  color: var(--texto);
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.95rem;
+  font-weight: 300;
+  padding: 0.75rem 1rem;
+  outline: none;
+  transition:
+    border-color 0.18s,
+    box-shadow 0.18s,
+    background 0.18s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #3a3f58;
+}
+
+/* Estado foco: borde violeta + sombra suave */
+input:focus,
+textarea:focus {
+  border-color: var(--borde-foco);
+  box-shadow: 0 0 0 3px var(--brillo);
+  background: #1e2232;
+}
+
+/* Estado error: borde rojo (clase .error añadida por script.js) */
+input.error,
+textarea.error {
+  border-color: var(--error) !important;
+  box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.18) !important;
+}
+
+/* Ícono del date picker en tono violeta */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6) sepia(1) saturate(3) hue-rotate(210deg);
+  cursor: pointer;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 110px;
+  line-height: 1.6;
+}
+
+/* ─────────────────────────────────────────────────────
+   9. CONTADOR DE CARACTERES
+   script.js actualiza el número en tiempo real.
+   Cambia a naranja cuando supera el 80% del límite.
+   ───────────────────────────────────────────────────── */
+.contador {
+  font-size: 0.72rem;
+  color: var(--texto-suave);
+  text-align: right;
+  margin-top: -0.3rem;
+  transition: color 0.18s;
+}
+
+.contador.advertencia {
+  color: #fb923c;
+}
+
+/* ─────────────────────────────────────────────────────
+   10. MENSAJES DE ERROR DE CAMPO
+   ───────────────────────────────────────────────────── */
+.error-message {
+  font-size: 0.75rem;
+  color: var(--error);
+  min-height: 1em;
+}
+
+/* ─────────────────────────────────────────────────────
+   11. BOTONES
+   ───────────────────────────────────────────────────── */
+.botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.4rem;
+}
+
+/* Botón principal: degradado violeta, muy redondeado */
+.btn-enviar {
+  flex: 1;
+  background: var(--degradado);
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--fuente-cuerpo);
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.9rem 2rem;
+  cursor: pointer;
+  transition:
+    transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.18s;
+}
+
+.btn-enviar:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(124, 106, 255, 0.5);
+}
+
+.btn-enviar:active {
+  transform: translateY(0);
+}
+
+/* Botón secundario: sin fondo, solo borde */
+.btn-limpiar {
+  padding: 0.9rem 1.6rem;
+  background: transparent;
+  color: var(--texto-suave);
+  border: 1.5px solid var(--borde);
+  border-radius: 50px;
+  font-family: var(--fuente-cuerpo);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition:
+    color 0.18s,
+    border-color 0.18s,
+    background 0.18s;
+  white-space: nowrap;
+}
+
+.btn-limpiar:hover {
+  color: var(--texto);
+  border-color: #3d425a;
+  background: var(--input-bg);
+}
+
+/* ─────────────────────────────────────────────────────
+   12. ANIMACIONES
+   ───────────────────────────────────────────────────── */
+@keyframes subir {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bajar {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes flotar {
+  0%,
+  100% {
+    transform: translate(0, 0);
+  }
+  50% {
+    transform: translate(20px, -18px);
+  }
+}
+
+/* ─────────────────────────────────────────────────────
+   13. RESPONSIVE — móviles (menos de 560px)
+   ───────────────────────────────────────────────────── */
+@media (max-width: 560px) {
+  .tarjeta {
+    padding: 1.8rem 1.3rem;
+    border-radius: 20px;
+  }
+
+  /* 1 columna en móvil */
+  form {
+    grid-template-columns: 1fr;
+  }
+
+  .botones {
+    flex-direction: column;
+  }
+}

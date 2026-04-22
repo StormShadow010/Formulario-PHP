@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="es-ES">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulario de Contacto</title>
+
+    <!-- Fuentes: Playfair Display (títulos) + DM Sans (cuerpo) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Hoja de estilos -->
+    <link rel="stylesheet" href="css/style.css" />
+  </head>
+  <body>
+    <!-- Esferas decorativas de fondo -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+
+    <!-- Encabezado fuera de la tarjeta -->
+    <header class="encabezado">
+      <span class="badge">Soporte &amp; Atención</span>
+      <h1>¿En qué podemos<br /><span>ayudarte hoy?</span></h1>
+      <p class="descripcion">
+        Completa el formulario y nos pondremos en contacto contigo a la brevedad
+        posible.
+      </p>
+    </header>
+
+    <!-- Tarjeta del formulario -->
+    <div class="tarjeta">
+      <!--
+            FORMULARIO DE CONTACTO
+            action  → procesar.php recibe y guarda los datos
+            method  → POST envía los datos de forma segura
+            novalidate → desactiva validación nativa; la hace script.js
+        -->
+      <form
+        id="formulario-contacto"
+        action="./php/procesar.php"
+        method="POST"
+        novalidate
+      >
+        <!-- Fila 1: Nombre | Correo -->
+        <div class="campo">
+          <label for="nombre">👤 Nombre completo</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            placeholder="Ej. María García López"
+            required
+          />
+          <span class="error-message" id="error-nombre"></span>
+        </div>
+
+        <div class="campo">
+          <label for="correo">✉️ Correo electrónico</label>
+          <input
+            type="email"
+            id="correo"
+            name="correo"
+            placeholder="ejemplo@correo.com"
+            required
+          />
+          <span class="error-message" id="error-correo"></span>
+        </div>
+
+        <!-- Fila 2: Teléfono | Fecha -->
+        <div class="campo">
+          <label for="telefono">📞 Teléfono</label>
+          <input
+            type="tel"
+            id="telefono"
+            name="telefono"
+            placeholder="Ej. 300 123 4567"
+          />
+          <span class="error-message" id="error-telefono"></span>
+        </div>
+
+        <div class="campo">
+          <label for="fecha">📅 Fecha de solicitud</label>
+          <input type="date" id="fecha" name="fecha" required />
+          <span class="error-message" id="error-fecha"></span>
+        </div>
+
+        <!-- Fila 3: Petición (ancho completo) -->
+        <div class="campo campo-completo">
+          <label for="peticion">📝 Petición</label>
+          <textarea
+            id="peticion"
+            name="peticion"
+            rows="5"
+            maxlength="1000"
+            placeholder="Describe tu solicitud con el mayor detalle posible..."
+            required
+          ></textarea>
+          <span class="contador"><span id="cuenta">0</span> / 1000</span>
+          <span class="error-message" id="error-peticion"></span>
+        </div>
+
+        <!-- Botones -->
+        <div class="botones">
+          <button type="submit" class="btn-enviar">
+            Enviar solicitud &nbsp;→
+          </button>
+          <button type="reset" class="btn-limpiar">Limpiar</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Script de validación -->
+    <script src="js/script.js"></script>
+  </body>
+</html>
